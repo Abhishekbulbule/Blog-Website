@@ -10,7 +10,6 @@ const useUser = () => {
        const unsubscribe = onAuthStateChanged(auth, (user) =>{
         setUser(user);
         setIsLoading(false);
-        // console.log(user);
        });
        return unsubscribe; 
     },[])

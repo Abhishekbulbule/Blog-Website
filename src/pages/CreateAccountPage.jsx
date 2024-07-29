@@ -18,7 +18,6 @@ const CreateAccountPage = () => {
     }
     try{
       const user = await createUserWithEmailAndPassword(auth, email, password);
-      console.log(user);
       navigate('/articleList')
     }catch(e){
       setError(e.message);

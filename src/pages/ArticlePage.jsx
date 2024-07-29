@@ -9,18 +9,23 @@ import AddComment from "../components/AddComment";
 import useUser from "../hooks/useUser";
 //new edit
 const ArticlePage = () => {
-  const [articleInfo, setArticleInfo] = useState({name:"", title:"", content:"",comments:[],upvotes:0,canUpvote:false});
+  const [articleInfo, setArticleInfo] = useState({name:"", title:"", content:"",comments:[],upvotes:0, canUpvote:false});
   const { articleId } = useParams();
   const {canUpvote} = articleInfo;
+  
   const data = articleData.find((e) => e.name === articleId);
-console.log(canUpvote)
   const {user, isLoading} = useUser();
+ 
+  
+
   useEffect(() => {
     const loadArticle = async () => {
       const token = user && await user.getIdToken();
-      const headers = token ? {authToken:token}:{};
+      const uid = user.uid;
+      const headers = token ? {authToken:token, uid:uid}:{};
+      
       const data = await axios.get(`/api/articles/${articleId}`,{headers});
-      console.log(data.data)
+     
       setArticleInfo(data.data);
     };
     if(!isLoading){
@@ -33,7 +38,7 @@ console.log(canUpvote)
   const addLike = async()=>{
     const token = user && await user.getIdToken();
     const headers = token ? {authToken:token}:{};
-    const response = await axios.put(`/api/articles/${articleId}/upvotes`,null, {headers});
+    const response = await axios.put(`/api/articles/${articleId}/upvotes`,{user}, {headers});
     setArticleInfo(response.data);
   }
   return (
@@ -42,6 +47,7 @@ console.log(canUpvote)
         Title -- {data.title}
       </h1>
       <p className="text-center my-3 text-xl font-bold">
+
         {user ? <button className="p-2 border-b-2 border-slate-500 bg-slate-300 hover:bg-slate-100 hover:border-gray-800" onClick={addLike}>{canUpvote ? `Likes ${articleInfo.upvotes||0}`: `Already Liked ${articleInfo.upvotes||0}`}</button>:<Link to={'/login'}><button className="p-2 border-b-2 border-slate-500 bg-slate-300 hover:bg-slate-100 hover:border-gray-800">Login to like</button></Link>} 
       </p>
 

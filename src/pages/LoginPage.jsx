@@ -11,12 +11,9 @@ const LoginPage = () => {
     e.preventDefault();
     try {
         const login = await signInWithEmailAndPassword(auth, email, password);
-        console.log(login)
-        navigate('/')
-        console.log(login);
+        navigate('/');
     } catch (error) {
         setError(error);
-        console.log(error);
 
     }
   }
